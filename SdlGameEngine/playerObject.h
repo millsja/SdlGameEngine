@@ -3,9 +3,10 @@
 
 #include "iGameObject.h"
 #include "iCollideable.h"
+#include "iControllable.h"
 #include "SDL.h"
 
-class PlayerObject : public IGameObject, public ICollideable
+class PlayerObject : public IGameObject, public ICollideable, public IControllable
 {
 public:
 	PlayerObject(int textureId, int x, int y, int w, int h);

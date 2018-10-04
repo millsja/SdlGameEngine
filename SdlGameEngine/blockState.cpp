@@ -18,7 +18,7 @@ BlockState::BlockState(SdlClient* sdlClient)
 	// load player
 	int w = 0, h = 0;
 	Color white = { 0xFF, 0xFF, 0xFF, 0xFF };
-	SDL_Texture* sprite = this->sdlClient_->LoadTexture("C:\\Users\\James\\source\\repos\\SDLTutorials\\Debug\\breakout_player.png", w, h, &white);
+	SDL_Texture* sprite = this->sdlClient_->LoadTexture("C:\\Users\\James\\source\\repos\\SdlGameEngine\\Debug\\breakout_player.png", w, h, &white);
 	this->collection_.AddTexture(TextureIdEnum::SPRITE_1, sprite);
 	this->objects_.push_back(std::unique_ptr<IGameObject>(new PlayerObject(TextureIdEnum::SPRITE_1, 150, 400, w, h)));
 
@@ -58,7 +58,11 @@ void BlockState::Start()
 
 		for (std::vector<std::unique_ptr<IGameObject>>::iterator it = this->objects_.begin(); it != objects_.end(); it++)
 		{
-			it->get()->HandleEvents(&e, keystates);
+			IControllable* a = null;
+			if (a = dynamic_cast<IControllable*>(it->get()))
+			{
+				a->HandleEvents(&e, keystates);
+			}
 		}
 
 		while (this->collisionDetector_.FindCollisions())
@@ -81,13 +85,4 @@ void BlockState::Start()
 
 void BlockState::Sleep()
 {
-}
-
-BlockState::~BlockState()
-{
-	// delete this->_sdlClient;
-	// this->_sdlClient = null;
-
-	// delete this->_collection;
-	// this->_collection = null;
 }

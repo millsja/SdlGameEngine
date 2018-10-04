@@ -6,12 +6,13 @@
 #include "SDL_image.h"
 #include <stdio.h>
 #include <memory>
+#include <string>
 
 class SdlClient
 {
 public:
 	// constructors
-	SdlClient(const int sceenWidth, const int screenHeight);
+	SdlClient(const int sceenWidth, const int screenHeight, const std::string name);
 	~SdlClient();
 
 	// apply surfaces
@@ -40,9 +41,8 @@ public:
 	void HideMouse(bool hide);
 private:
 	SDL_Window* window_;
-	// SDL_Surface* _screenSurface;
 	SDL_Renderer* renderer_;
-	void InitWindow(const int sceenWidth, const int screenHeight);
+	void InitWindow(const int sceenWidth, const int screenHeight, const std::string name);
 	void InitScreenSurface();
 };
 

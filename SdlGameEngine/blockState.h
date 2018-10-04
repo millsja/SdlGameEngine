@@ -23,7 +23,6 @@ class BlockState : public IGameState
 {
 public:
 	BlockState(SdlClient* sdlClient);
-	~BlockState();
 	void Sleep();
 	void Start();
 private:

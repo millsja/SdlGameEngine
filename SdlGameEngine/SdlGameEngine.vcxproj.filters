@@ -1,0 +1,90 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <ClCompile Include="collisionDetector.cpp">
+      <Filter>Engine\Source</Filter>
+    </ClCompile>
+    <ClCompile Include="sdlClient.cpp">
+      <Filter>Engine\Source</Filter>
+    </ClCompile>
+    <ClCompile Include="textureCollection.cpp">
+      <Filter>Engine\Source</Filter>
+    </ClCompile>
+    <ClCompile Include="stateStack.cpp">
+      <Filter>Engine\Source</Filter>
+    </ClCompile>
+    <ClCompile Include="blockState.cpp">
+      <Filter>Game\Source</Filter>
+    </ClCompile>
+    <ClCompile Include="main.cpp">
+      <Filter>Game\Source</Filter>
+    </ClCompile>
+    <ClCompile Include="playerObject.cpp">
+      <Filter>Game\Source</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="boundaryObject.h">
+      <Filter>Engine\Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="utilities.h">
+      <Filter>Engine\Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="collisionDetector.h">
+      <Filter>Engine\Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="sdlClient.h">
+      <Filter>Engine\Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="textureCollection.h">
+      <Filter>Engine\Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="stateStack.h">
+      <Filter>Engine\Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="ballObject.h">
+      <Filter>Game\Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="blockState.h">
+      <Filter>Game\Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="iCollideable.h">
+      <Filter>Engine\Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="iGameObject.h">
+      <Filter>Engine\Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="iGameState.h">
+      <Filter>Engine\Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="playerObject.h">
+      <Filter>Game\Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="iControllable.h">
+      <Filter>Engine\Headers</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="Engine">
+      <UniqueIdentifier>{23b98420-3192-4d07-a9a1-71e4d2a70657}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Headers">
+      <UniqueIdentifier>{7b440efd-b02c-4860-b3c3-00074e842040}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Source">
+      <UniqueIdentifier>{2b0af86e-8ce1-4b25-8cdb-2b8ff9ff06e5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game">
+      <UniqueIdentifier>{877d9e63-ec03-4598-8601-aa048cf9fc9e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\Headers">
+      <UniqueIdentifier>{7d8f6206-6092-4723-9b5a-35be3f73e6a8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\Source">
+      <UniqueIdentifier>{e7ea8bbc-1cf3-4aae-a5b8-9f953fe24e4c}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+</Project>

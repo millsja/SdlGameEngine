@@ -138,6 +138,7 @@
     <ClInclude Include="collisionDetector.h" />
     <ClInclude Include="ballObject.h" />
     <ClInclude Include="iCollideable.h" />
+    <ClInclude Include="iControllable.h" />
     <ClInclude Include="iGameObject.h" />
     <ClInclude Include="playerObject.h" />
     <ClInclude Include="stateStack.h" />

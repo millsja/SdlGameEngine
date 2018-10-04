@@ -4,16 +4,16 @@
 #include "blockState.h"
 #include "SDL.h"
 #include <stdio.h>
+#include <string>
 
 const int SCREEN_WIDTH = 640;
 const int SCREEN_HEIGHT = 480;
+const string NAME = "SDL Game";
 
 int main( int argc, char* args[] )
 {
-	SdlClient client = { SCREEN_WIDTH, SCREEN_HEIGHT };
+	SdlClient client = { SCREEN_WIDTH, SCREEN_HEIGHT, NAME };
 	StateStack stack;
-	// GeometryState state(&client);
-	// KeyTutorialGameState state(&client);
 	BlockState state(&client);
 
 	stack.Push(&state);

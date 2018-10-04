@@ -1,9 +1,9 @@
 #include "sdlClient.h"
 
-SdlClient::SdlClient(const int screenWidth, const int screenHeight)
+SdlClient::SdlClient(const int screenWidth, const int screenHeight, const std::string name)
 {
 	this->window_ = null;
-	this->InitWindow(screenWidth, screenHeight);
+	this->InitWindow(screenWidth, screenHeight, name);
 	this->InitScreenSurface();
 }
 
@@ -52,10 +52,10 @@ void SdlClient::InitScreenSurface()
 	SDL_UpdateWindowSurface(this->window_);
 }
 
-void SdlClient::InitWindow(const int screenWidth, const int screenHeight)
+void SdlClient::InitWindow(const int screenWidth, const int screenHeight, const std::string name)
 {
 	this->window_ = SDL_CreateWindow(
-		"SDLTutorials",
+		name.c_str(),
 		SDL_WINDOWPOS_UNDEFINED,
 		SDL_WINDOWPOS_UNDEFINED,
 		screenWidth,
