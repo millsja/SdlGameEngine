@@ -22,11 +22,19 @@ BlockState::BlockState(SdlClient* sdlClient)
 	this->collection_.AddTexture(TextureIdEnum::SPRITE_1, sprite);
 	this->objects_.push_back(std::unique_ptr<IGameObject>(new PlayerObject(TextureIdEnum::SPRITE_1, 150, 400, w, h)));
 
+	// load ball 
+	w = 0, h = 0;
+	SDL_Texture* ballSprite = this->sdlClient_->LoadTexture("C:\\Users\\James\\source\\repos\\SdlGameEngine\\Debug\\ball.png", w, h, &white);
+	this->collection_.AddTexture(TextureIdEnum::SPRITE_2, ballSprite);
+	this->objects_.push_back(std::unique_ptr<IGameObject>(new BallObject(TextureIdEnum::SPRITE_2, 150, 100, w, h, 0, .15)));
+
 	// load boundaries
 	int windowW = this->sdlClient_->GetWindowWidth();
 	int windowH = this->sdlClient_->GetWindowHeight();
 	this->objects_.push_back(std::unique_ptr<IGameObject>(new BoundaryObject(TextureIdEnum::NO_RENDER, -2, 0, 2, windowH)));
 	this->objects_.push_back(std::unique_ptr<IGameObject>(new BoundaryObject(TextureIdEnum::NO_RENDER, windowW, 0, 2, windowH)));
+	this->objects_.push_back(std::unique_ptr<IGameObject>(new BoundaryObject(TextureIdEnum::NO_RENDER, 0, -2, windowW, 2)));
+	this->objects_.push_back(std::unique_ptr<IGameObject>(new BoundaryObject(TextureIdEnum::NO_RENDER, 0, windowH, windowW, 2)));
 }
 
 void BlockState::Start()
@@ -63,11 +71,18 @@ void BlockState::Start()
 			{
 				a->HandleEvents(&e, keystates);
 			}
+
+			IEveryFrame* b = null;
+			if (b = dynamic_cast<IEveryFrame*>(it->get()))
+			{
+				b->HandleNewFrame();
+			}
 		}
 
-		while (this->collisionDetector_.FindCollisions())
-		{
-		}
+		this->collisionDetector_.FindCollisions();
+		// while (this->collisionDetector_.FindCollisions())
+		// {
+		// }
 
 		this->sdlClient_->RenderClear();
 		for (std::vector<std::unique_ptr<IGameObject>>::iterator it = this->objects_.begin(); it != objects_.end(); it++)

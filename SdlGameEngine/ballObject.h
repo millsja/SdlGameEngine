@@ -2,16 +2,28 @@
 #define BALLOBJECT_H
 
 #include "iGameObject.h"
+#include "iEveryFrame.h"
+#include "iCollideable.h"
+#include <math.h>
+#include "iHasVelocity.h"
 
-class BallObject : public IGameObject
+class BallObject : public IGameObject, public IEveryFrame, public ICollideable 
 {
 public:
-	// void HandleEvents(SDL_Event* e, const Uint8* keystates = null) = 0;
-	// void SetLocation(int x, int y) = 0;
-	// SDL_Rect* GetDestination() = 0;
-	// int GetTextureId() = 0;
-	// void ResolveCollision(IGameObject* object) = 0;;
+	BallObject(int textureId, int x, int y, int w, int h, float xVelocity, float yVelocity);
+	void SetLocation(int x, int y) { this->dest_.x = x; this->dest_.y = y; }
+	SDL_Rect* GetDestination() { return &(this->dest_); }
+	int GetTextureId() { return this->textureId_; };
+	void ResolveCollision(ICollideable* object);
+	void HandleNewFrame();
 private:
+	float xCharge_;
+	float yCharge_;
+	float xVelocity_; // pixel/frame
+	float yVelocity_; // pixel/frame
+	struct Coords lastLocation_;
+	int textureId_;
+	SDL_Rect dest_;
 };
 
 #endif

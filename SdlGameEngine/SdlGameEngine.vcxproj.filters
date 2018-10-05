@@ -22,6 +22,9 @@
     <ClCompile Include="playerObject.cpp">
       <Filter>Game\Source</Filter>
     </ClCompile>
+    <ClCompile Include="BallObject.cpp">
+      <Filter>Game\Source</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="boundaryObject.h">
@@ -61,6 +64,12 @@
       <Filter>Game\Headers</Filter>
     </ClInclude>
     <ClInclude Include="iControllable.h">
+      <Filter>Engine\Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="iEveryFrame.h">
+      <Filter>Engine\Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="iHasVelocity.h">
       <Filter>Engine\Headers</Filter>
     </ClInclude>
   </ItemGroup>

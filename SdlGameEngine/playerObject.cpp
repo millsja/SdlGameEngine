@@ -47,3 +47,12 @@ bool PlayerObject::Moved(int x, int y)
 {
 	return !(x == this->lastLocation_.x && y == this->lastLocation_.y);
 }
+
+void PlayerObject::HandleNewFrame()
+{
+	this->xVelocity_ = 0.25 * (this->dest_.x - this->locationAsOfLastFrame_.x) + .85 * this->xVelocity_;
+	this->yVelocity_ = 0.25 * (this->dest_.y - this->locationAsOfLastFrame_.y) + .85 * this->yVelocity_;
+
+	this->locationAsOfLastFrame_.x = this->dest_.x;
+	this->locationAsOfLastFrame_.y = this->dest_.y;
+}
