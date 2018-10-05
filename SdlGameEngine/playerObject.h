@@ -25,7 +25,7 @@ private:
 	float yVelocity_;
 	struct Coords locationAsOfLastFrame_;
 	bool Moved(int x, int y);
-	struct Coords lastLocation_;
+	// struct Coords lastLocation_;
 	int textureId_;
 	SDL_Rect dest_;
 };
