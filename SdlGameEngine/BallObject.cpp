@@ -21,7 +21,7 @@ void BallObject::ResolveCollision(ICollideable* object)
 		&& this->dest_.x + this->dest_.w > object->GetDestination()->x)
 	{
 		this->dest_.x -= 1;
-		this->xVelocity_ = -1 * this->xVelocity_;
+		this->xVelocity_ = -0.75 * this->xVelocity_;
 		this->xCharge_ = 0;
 	}
 
@@ -29,7 +29,7 @@ void BallObject::ResolveCollision(ICollideable* object)
 		&& this->dest_.x < object->GetDestination()->x + object->GetDestination()->w)
 	{
 		this->dest_.x += 1;
-		this->xVelocity_ = -1 * this->xVelocity_;
+		this->xVelocity_ = -0.75 * this->xVelocity_;
 		this->xCharge_ = 0;
 	}
 
@@ -52,7 +52,7 @@ void BallObject::ResolveCollision(ICollideable* object)
 	IHasVelocity* h = null;
 	if (h = dynamic_cast<IHasVelocity*>(object))
 	{
-		this->xVelocity_ = .25 * h->GetXVelocity();
+		this->xVelocity_ += .25 * h->GetXVelocity();
 	}
 }
 
