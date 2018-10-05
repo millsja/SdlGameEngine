@@ -10,6 +10,9 @@ BlockState::BlockState(SdlClient* sdlClient)
 	this->sdlClient_->RenderClear();
 	this->sdlClient_->Update();
 
+	int windowW = this->sdlClient_->GetWindowWidth();
+	int windowH = this->sdlClient_->GetWindowHeight();
+
 	// init collision detector
 	this->collisionDetector_.SetH(this->sdlClient_->GetWindowHeight());
 	this->collisionDetector_.SetW(this->sdlClient_->GetWindowWidth());
@@ -20,17 +23,15 @@ BlockState::BlockState(SdlClient* sdlClient)
 	Color white = { 0xFF, 0xFF, 0xFF, 0xFF };
 	SDL_Texture* sprite = this->sdlClient_->LoadTexture("C:\\Users\\James\\source\\repos\\SdlGameEngine\\Debug\\breakout_player.png", w, h, &white);
 	this->collection_.AddTexture(TextureIdEnum::SPRITE_1, sprite);
-	this->objects_.push_back(std::unique_ptr<IGameObject>(new PlayerObject(TextureIdEnum::SPRITE_1, 150, 400, w, h)));
+	this->objects_.push_back(std::unique_ptr<IGameObject>(new PlayerObject(TextureIdEnum::SPRITE_1, windowW/2 - w/2, 400, w, h)));
 
 	// load ball 
 	w = 0, h = 0;
 	SDL_Texture* ballSprite = this->sdlClient_->LoadTexture("C:\\Users\\James\\source\\repos\\SdlGameEngine\\Debug\\ball.png", w, h, &white);
 	this->collection_.AddTexture(TextureIdEnum::SPRITE_2, ballSprite);
-	this->objects_.push_back(std::unique_ptr<IGameObject>(new BallObject(TextureIdEnum::SPRITE_2, 150, 100, w, h, 0, .15)));
+	this->objects_.push_back(std::unique_ptr<IGameObject>(new BallObject(TextureIdEnum::SPRITE_2, windowW/2 - w/2, 100, w, h, 0, .15)));
 
 	// load boundaries
-	int windowW = this->sdlClient_->GetWindowWidth();
-	int windowH = this->sdlClient_->GetWindowHeight();
 	this->objects_.push_back(std::unique_ptr<IGameObject>(new BoundaryObject(TextureIdEnum::NO_RENDER, -2, 0, 2, windowH)));
 	this->objects_.push_back(std::unique_ptr<IGameObject>(new BoundaryObject(TextureIdEnum::NO_RENDER, windowW, 0, 2, windowH)));
 	this->objects_.push_back(std::unique_ptr<IGameObject>(new BoundaryObject(TextureIdEnum::NO_RENDER, 0, -2, windowW, 2)));
