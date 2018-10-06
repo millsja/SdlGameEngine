@@ -13,10 +13,11 @@ BlockState::BlockState(SdlClient* sdlClient)
 	int windowW = this->sdlClient_->GetWindowWidth();
 	int windowH = this->sdlClient_->GetWindowHeight();
 
-	// init collision detector
+	// init collision detector, scorekeeper
 	this->collisionDetector_.SetH(this->sdlClient_->GetWindowHeight());
 	this->collisionDetector_.SetW(this->sdlClient_->GetWindowWidth());
 	this->collisionDetector_.SetObjects(&(this->objects_));
+	this->scoreKeeper_.SetWinThreshold(3);
 
 	// load player
 	int w = 0, h = 0;
@@ -41,10 +42,10 @@ BlockState::BlockState(SdlClient* sdlClient)
 	this->objects_.push_back(std::unique_ptr<IGameObject>(ball));
 
 	// load boundaries
-	this->objects_.push_back(std::unique_ptr<IGameObject>(new BoundaryObject(TextureIdEnum::NO_RENDER, -2, 0, 2, windowH)));
-	this->objects_.push_back(std::unique_ptr<IGameObject>(new BoundaryObject(TextureIdEnum::NO_RENDER, windowW, 0, 2, windowH)));
-	this->objects_.push_back(std::unique_ptr<IGameObject>(new BoundaryObject(TextureIdEnum::NO_RENDER, 0, -2, windowW, 2)));
-	this->objects_.push_back(std::unique_ptr<IGameObject>(new BoundaryObject(TextureIdEnum::NO_RENDER, 0, windowH, windowW, 2)));
+	this->objects_.push_back(std::unique_ptr<IGameObject>(new BoundaryObject(TextureIdEnum::NO_RENDER, -2, 0, 2, windowH, &this->scoreKeeper_)));
+	this->objects_.push_back(std::unique_ptr<IGameObject>(new BoundaryObject(TextureIdEnum::NO_RENDER, windowW, 0, 2, windowH, &this->scoreKeeper_)));
+	this->objects_.push_back(std::unique_ptr<IGameObject>(new BoundaryObject(TextureIdEnum::NO_RENDER, 0, -2, windowW, 2, &this->scoreKeeper_, 1, 0)));
+	this->objects_.push_back(std::unique_ptr<IGameObject>(new BoundaryObject(TextureIdEnum::NO_RENDER, 0, windowH, windowW, 2, &this->scoreKeeper_, 0, 1)));
 }
 
 void BlockState::Start()
@@ -90,9 +91,12 @@ void BlockState::Start()
 		}
 
 		this->collisionDetector_.FindCollisions();
-		// while (this->collisionDetector_.FindCollisions())
-		// {
-		// }
+
+		if (this->scoreKeeper_.GetGameStatus() != GameStatusEnum::INCOMPLETE)
+		{
+			cont = false;
+			break;
+		}
 
 		this->sdlClient_->RenderClear();
 		for (std::vector<std::unique_ptr<IGameObject>>::iterator it = this->objects_.begin(); it != objects_.end(); it++)

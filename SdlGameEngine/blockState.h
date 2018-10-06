@@ -15,6 +15,7 @@
 #include "enemyObject.h"
 #include "boundaryObject.h"
 #include "ballObject.h"
+#include "scoreKeeper.h"
 #include <memory>
 
 #define string std::string
@@ -28,6 +29,7 @@ public:
 	void Sleep();
 	void Start();
 private:
+	ScoreKeeper scoreKeeper_;
 	CollisionDetector collisionDetector_;
 	SdlClient* sdlClient_;
 	TextureCollection collection_;

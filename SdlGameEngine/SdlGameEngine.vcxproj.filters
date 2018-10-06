@@ -28,6 +28,9 @@
     <ClCompile Include="ballObject.cpp">
       <Filter>Game\Source</Filter>
     </ClCompile>
+    <ClCompile Include="scoreKeeper.cpp">
+      <Filter>Game\Source</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="boundaryObject.h">
@@ -82,6 +85,9 @@
       <Filter>Engine\Headers</Filter>
     </ClInclude>
     <ClInclude Include="enemyObject.h">
+      <Filter>Game\Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="scoreKeeper.h">
       <Filter>Game\Headers</Filter>
     </ClInclude>
   </ItemGroup>
