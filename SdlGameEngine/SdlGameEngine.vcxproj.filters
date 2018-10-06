@@ -22,7 +22,10 @@
     <ClCompile Include="playerObject.cpp">
       <Filter>Game\Source</Filter>
     </ClCompile>
-    <ClCompile Include="BallObject.cpp">
+    <ClCompile Include="enemyObject.cpp">
+      <Filter>Game\Source</Filter>
+    </ClCompile>
+    <ClCompile Include="ballObject.cpp">
       <Filter>Game\Source</Filter>
     </ClCompile>
   </ItemGroup>
@@ -71,6 +74,15 @@
     </ClInclude>
     <ClInclude Include="iHasVelocity.h">
       <Filter>Engine\Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="iBallObserver.h">
+      <Filter>Engine\Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="iObservableBall.h">
+      <Filter>Engine\Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="enemyObject.h">
+      <Filter>Game\Headers</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

@@ -66,6 +66,7 @@ void BallObject::HandleNewFrame()
 		this->lastLocation_.x = this->dest_.x;
 		this->dest_.x += this->xCharge_;
 		this->xCharge_ *= 0;
+		this->Notify();
 	}
 
 	if (fabs(this->yCharge_) >= 1)
@@ -73,6 +74,15 @@ void BallObject::HandleNewFrame()
 		this->lastLocation_.y = this->dest_.y;
 		this->dest_.y += this->yCharge_;
 		this->yCharge_ *= 0;
+		this->Notify();
 	}
 
+}
+
+void BallObject::Notify()
+{
+	for (std::vector<IBallObserver*>::iterator it = this->observers_.begin(); it != this->observers_.end(); it++)
+	{
+		(*it)->Update(this->dest_.x, this->dest_.y);
+	}
 }

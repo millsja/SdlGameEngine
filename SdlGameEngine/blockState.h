@@ -12,13 +12,14 @@
 #include <vector>
 #include "iGameObject.h"
 #include "playerObject.h"
+#include "enemyObject.h"
 #include "boundaryObject.h"
 #include "ballObject.h"
 #include <memory>
 
 #define string std::string
 
-enum TextureIdEnum { NO_RENDER = 0, SPRITE_1 = 1, SPRITE_2 = 2 };
+enum TextureIdEnum { NO_RENDER = 0, SPRITE_1 = 1, SPRITE_2 = 2, SPRITE_3 = 3 };
 
 class BlockState : public IGameState
 {

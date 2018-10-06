@@ -124,8 +124,9 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="BallObject.cpp" />
+    <ClCompile Include="ballObject.cpp" />
     <ClCompile Include="blockState.cpp" />
+    <ClCompile Include="enemyObject.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="playerObject.cpp" />
     <ClCompile Include="sdlClient.cpp" />
@@ -138,11 +139,14 @@
     <ClInclude Include="boundaryObject.h" />
     <ClInclude Include="collisionDetector.h" />
     <ClInclude Include="ballObject.h" />
+    <ClInclude Include="enemyObject.h" />
     <ClInclude Include="iHasVelocity.h" />
     <ClInclude Include="iCollideable.h" />
     <ClInclude Include="iControllable.h" />
     <ClInclude Include="iEveryFrame.h" />
     <ClInclude Include="iGameObject.h" />
+    <ClInclude Include="iObservableBall.h" />
+    <ClInclude Include="iBallObserver.h" />
     <ClInclude Include="playerObject.h" />
     <ClInclude Include="stateStack.h" />
     <ClInclude Include="iGameState.h" />

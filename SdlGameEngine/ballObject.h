@@ -6,8 +6,12 @@
 #include "iCollideable.h"
 #include <math.h>
 #include "iHasVelocity.h"
+#include "iObservableBall.h"
+#include "iBallObserver.h"
+#include <algorithm>
+#include <vector>
 
-class BallObject : public IGameObject, public IEveryFrame, public ICollideable 
+class BallObject : public IGameObject, public IEveryFrame, public ICollideable, public IObservableBall
 {
 public:
 	BallObject(int textureId, int x, int y, int w, int h, float xVelocity, float yVelocity);
@@ -16,7 +20,11 @@ public:
 	int GetTextureId() { return this->textureId_; };
 	void ResolveCollision(ICollideable* object);
 	void HandleNewFrame();
+	void AttachObserver(IBallObserver* observer) { this->observers_.push_back(observer); }
+	void DetachObserver(IBallObserver* observer) { this->observers_.erase(std::remove(this->observers_.begin(), this->observers_.end(), observer)); };
+	void Notify();
 private:
+	std::vector<IBallObserver*> observers_;
 	float xCharge_;
 	float yCharge_;
 	float xVelocity_; // pixel/frame
