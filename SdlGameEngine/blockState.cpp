@@ -1,6 +1,7 @@
 #include "blockState.h"
 
 BlockState::BlockState(SdlClient* sdlClient)
+	: scoreKeeper_(sdlClient)
 {
 	// initialize sdl, window
 	this->sdlClient_ = sdlClient;

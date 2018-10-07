@@ -16,6 +16,7 @@
 #include "boundaryObject.h"
 #include "ballObject.h"
 #include "scoreKeeper.h"
+#include <sstream>
 #include <memory>
 
 #define string std::string

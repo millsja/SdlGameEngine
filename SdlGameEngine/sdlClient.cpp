@@ -17,6 +17,18 @@ SdlClient::~SdlClient()
 	SDL_Quit();
 }
 
+void SdlClient::SetUpTextRenderer(const std::string fontPath, int size)
+{
+	this->textRenderer_.Init(fontPath, size);
+}
+
+SDL_Texture* SdlClient::GetTextureFromText(std::string text, SDL_Color color, int dX, int dY)
+{
+	int w = 0, h = 0;
+	return this->textRenderer_.RenderText(this->renderer_, text, color, w, h);
+	// this->RenderTexture(texture.get(), dX, dY, w, h);
+}
+
 void SdlClient::BlitStretched(SDL_Surface* surface)
 {
 	std::unique_ptr<SDL_Surface, SdlDeleter> windowSurface(SDL_GetWindowSurface(this->window_), SdlDeleter());
@@ -65,6 +77,11 @@ void SdlClient::InitWindow(const int screenWidth, const int screenHeight, const 
 	if (!IMG_Init(IMG_INIT_PNG))
 	{
 		printf("Error initializing PNG loading: \n%s\n", IMG_GetError());
+	}
+
+	if (TTF_Init() < 0)
+	{
+		printf("Error initializing fonts: \n%s\n", IMG_GetError());
 	}
 
 	this->renderer_ = SDL_CreateRenderer(this->window_, -1, SDL_RENDERER_SOFTWARE);

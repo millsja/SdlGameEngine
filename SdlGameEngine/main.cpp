@@ -9,10 +9,12 @@
 const int SCREEN_WIDTH = 640;
 const int SCREEN_HEIGHT = 480;
 const string NAME = "SDL Game";
+const string FONT_PATH = "C:\\Users\\James\\source\\repos\\SdlGameEngine\\Debug\\VT323-Regular.ttf";
 
 int main( int argc, char* args[] )
 {
 	SdlClient client = { SCREEN_WIDTH, SCREEN_HEIGHT, NAME };
+	client.SetUpTextRenderer(FONT_PATH, 28);
 	StateStack stack;
 	BlockState state(&client);
 

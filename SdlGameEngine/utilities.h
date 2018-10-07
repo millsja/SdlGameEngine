@@ -3,6 +3,8 @@
 
 #include <stdint.h>
 #include "SDL.h"
+#include "SDL_ttf.h"
+
 #define null NULL
 
 struct Coords
@@ -21,10 +23,11 @@ struct Color
 
 struct SdlDeleter 
 {
-	void operator()(SDL_Window *p) const { SDL_DestroyWindow(p); }
-	void operator()(SDL_Renderer *p) const { SDL_DestroyRenderer(p); }
-	void operator()(SDL_Texture *p) const { SDL_DestroyTexture(p); }
-	void operator()(SDL_Surface *p) const { SDL_FreeSurface(p); }
+	void operator()(SDL_Window* p) const { SDL_DestroyWindow(p); }
+	void operator()(SDL_Renderer* p) const { SDL_DestroyRenderer(p); }
+	void operator()(SDL_Texture* p) const { SDL_DestroyTexture(p); }
+	void operator()(SDL_Surface* p) const { SDL_FreeSurface(p); }
+	void operator()(TTF_Font* p) const { TTF_CloseFont(p); }
 };
 
 // typedef std::unique_ptr<SDL_Surface, SdlDeleter> UniqueSdlSurface;
