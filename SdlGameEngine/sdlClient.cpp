@@ -22,11 +22,9 @@ void SdlClient::SetUpTextRenderer(const std::string fontPath, int size)
 	this->textRenderer_.Init(fontPath, size);
 }
 
-SDL_Texture* SdlClient::GetTextureFromText(std::string text, SDL_Color color, int dX, int dY)
+SDL_Texture* SdlClient::GetTextureFromText(std::string text, SDL_Color color, int& w, int& h)
 {
-	int w = 0, h = 0;
 	return this->textRenderer_.RenderText(this->renderer_, text, color, w, h);
-	// this->RenderTexture(texture.get(), dX, dY, w, h);
 }
 
 void SdlClient::BlitStretched(SDL_Surface* surface)

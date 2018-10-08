@@ -20,8 +20,10 @@ public:
 	GameStatusEnum GetGameStatus();
 	int GetPlayerScore() { return this->playerPoints_; }
 	int GetEnemyScore() { return this->enemyPoints_; }
-	SDL_Texture* GetScoreTexture();
+	SDL_Texture* GetScoreTexture(int& w, int& h);
 private:
+	int cachedW_;
+	int cachedH_;
 	SdlClient* sdlClient_;
 	std::unique_ptr<SDL_Texture, SdlDeleter> cachedScoreTexture_;
 	bool scoreChange_;

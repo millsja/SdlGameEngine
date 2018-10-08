@@ -43,10 +43,10 @@ BlockState::BlockState(SdlClient* sdlClient)
 	this->objects_.push_back(std::unique_ptr<IGameObject>(ball));
 
 	// load boundaries
-	this->objects_.push_back(std::unique_ptr<IGameObject>(new BoundaryObject(TextureIdEnum::NO_RENDER, -2, 0, 2, windowH, &this->scoreKeeper_)));
-	this->objects_.push_back(std::unique_ptr<IGameObject>(new BoundaryObject(TextureIdEnum::NO_RENDER, windowW, 0, 2, windowH, &this->scoreKeeper_)));
-	this->objects_.push_back(std::unique_ptr<IGameObject>(new BoundaryObject(TextureIdEnum::NO_RENDER, 0, -2, windowW, 2, &this->scoreKeeper_, 1, 0)));
-	this->objects_.push_back(std::unique_ptr<IGameObject>(new BoundaryObject(TextureIdEnum::NO_RENDER, 0, windowH, windowW, 2, &this->scoreKeeper_, 0, 1)));
+	this->objects_.push_back(std::unique_ptr<IGameObject>(new BoundaryObject(TextureIdEnum::NO_RENDER, -2, 0, 2, windowH, &this->scoreKeeper_, ball)));
+	this->objects_.push_back(std::unique_ptr<IGameObject>(new BoundaryObject(TextureIdEnum::NO_RENDER, windowW, 0, 2, windowH, &this->scoreKeeper_, ball)));
+	this->objects_.push_back(std::unique_ptr<IGameObject>(new BoundaryObject(TextureIdEnum::NO_RENDER, 0, -2, windowW, 2, &this->scoreKeeper_, ball, 1, 0)));
+	this->objects_.push_back(std::unique_ptr<IGameObject>(new BoundaryObject(TextureIdEnum::NO_RENDER, 0, windowH, windowW, 2, &this->scoreKeeper_, ball, 0, 1)));
 }
 
 void BlockState::Start()
@@ -100,6 +100,11 @@ void BlockState::Start()
 		}
 
 		this->sdlClient_->RenderClear();
+		int scoreW = 0, scoreH = 0;
+		SDL_Texture* scoreTexture = this->scoreKeeper_.GetScoreTexture(scoreW, scoreH);
+		this->sdlClient_->RenderTexture(scoreTexture, this->sdlClient_->GetWindowWidth() / 2 - scoreW / 2, 435, scoreW, scoreH);
+		this->sdlClient_->RenderTexture(scoreTexture, this->sdlClient_->GetWindowWidth() / 2 - scoreW / 2, 5, scoreW, scoreH);
+
 		for (std::vector<std::unique_ptr<IGameObject>>::iterator it = this->objects_.begin(); it != objects_.end(); it++)
 		{
 			SDL_Rect* dest = it->get()->GetDestination();

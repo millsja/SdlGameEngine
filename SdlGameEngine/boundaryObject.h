@@ -9,8 +9,9 @@
 class BoundaryObject : public IGameObject, public ICollideable 
 {
 public:
-	BoundaryObject(int textureId, int x, int y, int w, int h, ScoreKeeper* scoreKeeper, int playerReward = 0, int enemyReward = 0)
+	BoundaryObject(int textureId, int x, int y, int w, int h, ScoreKeeper* scoreKeeper, ICollideable* ball, int playerReward = 0, int enemyReward = 0)
 	{
+		this->ball_ = ball;
 		this->textureId_ = textureId;
 		this->dest_.x = x;
 		this->dest_.y = y;
@@ -24,8 +25,9 @@ public:
 	void SetLocation(int x, int y) { this->dest_.x = x; this->dest_.y = y; }
 	SDL_Rect* GetDestination() { return &(this->dest_); }
 	int GetTextureId() { return this->textureId_; };
-	void ResolveCollision(ICollideable* object) { this->scoreKeeper_->Update(this->playerReward_, this->enemyReward_); }
+	void ResolveCollision(ICollideable* object) { if (object == this->ball_) this->scoreKeeper_->Update(this->playerReward_, this->enemyReward_); }
 private:
+	ICollideable* ball_;
 	int playerReward_;
 	int enemyReward_;
 	int textureId_;
