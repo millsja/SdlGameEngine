@@ -2,6 +2,8 @@
 
 BallObject::BallObject(int textureId, int x, int y, int w, int h, float xVelocity, float yVelocity, bool accelerate, float maxSpeed)
 {
+	this->initialX_ = x;
+	this->initialY_ = y;
 	this->maxSpeed_ = maxSpeed;
 	this->accelerate_ = accelerate;
 	this->xCharge_ = 0;

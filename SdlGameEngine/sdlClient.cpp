@@ -1,9 +1,9 @@
 #include "sdlClient.h"
 
-SdlClient::SdlClient(const int screenWidth, const int screenHeight, const std::string name)
+SdlClient::SdlClient(const int screenWidth, const int screenHeight, const std::string name, bool fullscreen)
 {
 	this->window_ = null;
-	this->InitWindow(screenWidth, screenHeight, name);
+	this->InitWindow(screenWidth, screenHeight, name, fullscreen);
 	this->InitScreenSurface();
 }
 
@@ -62,7 +62,7 @@ void SdlClient::InitScreenSurface()
 	SDL_UpdateWindowSurface(this->window_);
 }
 
-void SdlClient::InitWindow(const int screenWidth, const int screenHeight, const std::string name)
+void SdlClient::InitWindow(const int screenWidth, const int screenHeight, const std::string name, bool fullscreen)
 {
 	this->window_ = SDL_CreateWindow(
 		name.c_str(),
@@ -71,6 +71,11 @@ void SdlClient::InitWindow(const int screenWidth, const int screenHeight, const 
 		screenWidth,
 		screenHeight,
 		SDL_WINDOW_SHOWN);
+
+	if (fullscreen)
+	{
+		SDL_SetWindowFullscreen(this->window_, SDL_WINDOW_FULLSCREEN);
+	}
 
 	if (!IMG_Init(IMG_INIT_PNG))
 	{

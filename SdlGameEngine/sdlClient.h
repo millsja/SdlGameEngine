@@ -13,7 +13,7 @@ class SdlClient
 {
 public:
 	// constructors
-	SdlClient(const int sceenWidth, const int screenHeight, const std::string name);
+	SdlClient(const int sceenWidth, const int screenHeight, const std::string name, bool fullscreen);
 	~SdlClient();
 
 	// apply surfaces
@@ -48,7 +48,7 @@ private:
 	TextRenderer textRenderer_;
 	SDL_Window* window_;
 	SDL_Renderer* renderer_;
-	void InitWindow(const int sceenWidth, const int screenHeight, const std::string name);
+	void InitWindow(const int sceenWidth, const int screenHeight, const std::string name, bool fullscreen);
 	void InitScreenSurface();
 };
 

@@ -24,6 +24,8 @@ public:
 	void DetachObserver(IBallObserver* observer) { this->observers_.erase(std::remove(this->observers_.begin(), this->observers_.end(), observer)); };
 	void Notify();
 private:
+	int initialX_;
+	int initialY_;
 	float maxSpeed_;
 	bool accelerate_;
 	std::vector<IBallObserver*> observers_;

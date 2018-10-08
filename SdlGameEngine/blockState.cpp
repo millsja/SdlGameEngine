@@ -25,7 +25,7 @@ BlockState::BlockState(SdlClient* sdlClient, int maxPoints, bool accelerate, flo
 	Color white = { 0xFF, 0xFF, 0xFF, 0xFF };
 	SDL_Texture* sprite = this->sdlClient_->LoadTexture("C:\\Users\\James\\source\\repos\\SdlGameEngine\\Debug\\breakout_player.png", w, h, &white);
 	this->collection_.AddTexture(TextureIdEnum::SPRITE_1, sprite);
-	this->objects_.push_back(std::unique_ptr<IGameObject>(new PlayerObject(TextureIdEnum::SPRITE_1, windowW/2 - w/2, 400, w, h)));
+	this->objects_.push_back(std::unique_ptr<IGameObject>(new PlayerObject(TextureIdEnum::SPRITE_1, windowW/2 - w/2, windowH - w/2 - 25, w, h)));
 
 	// load enemy 
 	w = 0, h = 0;
@@ -102,8 +102,8 @@ void BlockState::Start()
 		this->sdlClient_->RenderClear();
 		int scoreW = 0, scoreH = 0;
 		SDL_Texture* scoreTexture = this->scoreKeeper_.GetScoreTexture(scoreW, scoreH);
-		this->sdlClient_->RenderTexture(scoreTexture, this->sdlClient_->GetWindowWidth() / 2 - scoreW / 2, 435, scoreW, scoreH);
-		this->sdlClient_->RenderTexture(scoreTexture, this->sdlClient_->GetWindowWidth() / 2 - scoreW / 2, 5, scoreW, scoreH);
+		this->sdlClient_->RenderTexture(scoreTexture, this->sdlClient_->GetWindowWidth() / 2 - scoreW / 2, this->sdlClient_->GetWindowHeight() - 40, scoreW, scoreH);
+		// this->sdlClient_->RenderTexture(scoreTexture, this->sdlClient_->GetWindowWidth() / 2 - scoreW / 2, 5, scoreW, scoreH);
 
 		for (std::vector<std::unique_ptr<IGameObject>>::iterator it = this->objects_.begin(); it != objects_.end(); it++)
 		{
