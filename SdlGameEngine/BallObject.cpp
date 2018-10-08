@@ -1,7 +1,9 @@
 #include "ballObject.h"
 
-BallObject::BallObject(int textureId, int x, int y, int w, int h, float xVelocity, float yVelocity)
+BallObject::BallObject(int textureId, int x, int y, int w, int h, float xVelocity, float yVelocity, bool accelerate, float maxSpeed)
 {
+	this->maxSpeed_ = maxSpeed;
+	this->accelerate_ = accelerate;
 	this->xCharge_ = 0;
 	this->yCharge_ = 0;
 	this->xVelocity_ = xVelocity;
@@ -54,6 +56,11 @@ void BallObject::ResolveCollision(ICollideable* object)
 	{
 		this->xVelocity_ += .25 * h->GetXVelocity();
 	}
+
+	if (this->accelerate_ && this->yVelocity_ < this->maxSpeed_)
+	{
+		this->yVelocity_ *= 1.010;
+	}
 }
 
 void BallObject::HandleNewFrame()
@@ -76,7 +83,6 @@ void BallObject::HandleNewFrame()
 		this->yCharge_ *= 0;
 		this->Notify();
 	}
-
 }
 
 void BallObject::Notify()

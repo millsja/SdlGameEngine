@@ -1,6 +1,6 @@
 #include "blockState.h"
 
-BlockState::BlockState(SdlClient* sdlClient)
+BlockState::BlockState(SdlClient* sdlClient, int maxPoints, bool accelerate, float maxYSpeed)
 	: scoreKeeper_(sdlClient)
 {
 	// initialize sdl, window
@@ -18,7 +18,7 @@ BlockState::BlockState(SdlClient* sdlClient)
 	this->collisionDetector_.SetH(this->sdlClient_->GetWindowHeight());
 	this->collisionDetector_.SetW(this->sdlClient_->GetWindowWidth());
 	this->collisionDetector_.SetObjects(&(this->objects_));
-	this->scoreKeeper_.SetWinThreshold(3);
+	this->scoreKeeper_.SetWinThreshold(maxPoints);
 
 	// load player
 	int w = 0, h = 0;
@@ -38,7 +38,7 @@ BlockState::BlockState(SdlClient* sdlClient)
 	w = 0, h = 0;
 	SDL_Texture* ballSprite = this->sdlClient_->LoadTexture("C:\\Users\\James\\source\\repos\\SdlGameEngine\\Debug\\ball.png", w, h, &white);
 	this->collection_.AddTexture(TextureIdEnum::SPRITE_2, ballSprite);
-	BallObject* ball = new BallObject(TextureIdEnum::SPRITE_2, windowW / 2 - w / 2, windowH / 2, w, h, 0, .15);
+	BallObject* ball = new BallObject(TextureIdEnum::SPRITE_2, windowW / 2 - w / 2, windowH / 2, w, h, 0, 0.15, accelerate, maxYSpeed);
 	ball->AttachObserver(enemy);
 	this->objects_.push_back(std::unique_ptr<IGameObject>(ball));
 

@@ -14,7 +14,7 @@
 class BallObject : public IGameObject, public IEveryFrame, public ICollideable, public IObservableBall
 {
 public:
-	BallObject(int textureId, int x, int y, int w, int h, float xVelocity, float yVelocity);
+	BallObject(int textureId, int x, int y, int w, int h, float xVelocity, float yVelocity, bool accelerate, float maxSpeed);
 	void SetLocation(int x, int y) { this->dest_.x = x; this->dest_.y = y; }
 	SDL_Rect* GetDestination() { return &(this->dest_); }
 	int GetTextureId() { return this->textureId_; };
@@ -24,6 +24,8 @@ public:
 	void DetachObserver(IBallObserver* observer) { this->observers_.erase(std::remove(this->observers_.begin(), this->observers_.end(), observer)); };
 	void Notify();
 private:
+	float maxSpeed_;
+	bool accelerate_;
 	std::vector<IBallObserver*> observers_;
 	float xCharge_;
 	float yCharge_;

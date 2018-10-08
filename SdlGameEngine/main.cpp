@@ -16,7 +16,7 @@ int main( int argc, char* args[] )
 	SdlClient client = { SCREEN_WIDTH, SCREEN_HEIGHT, NAME };
 	client.SetUpTextRenderer(FONT_PATH, 28);
 	StateStack stack;
-	BlockState state(&client);
+	BlockState state(&client, 15, true, 0.35);
 
 	stack.Push(&state);
 	stack.Run();

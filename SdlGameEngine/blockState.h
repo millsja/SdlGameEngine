@@ -26,7 +26,7 @@ enum TextureIdEnum { NO_RENDER = 0, SPRITE_1 = 1, SPRITE_2 = 2, SPRITE_3 = 3 };
 class BlockState : public IGameState
 {
 public:
-	BlockState(SdlClient* sdlClient);
+	BlockState(SdlClient* sdlClient, int maxPoints, bool accelerate, float maxSpeed);
 	void Sleep();
 	void Start();
 private:
