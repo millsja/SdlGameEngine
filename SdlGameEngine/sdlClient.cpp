@@ -55,6 +55,12 @@ void SdlClient::Delay(int ms)
 	SDL_Delay(ms);
 }
 
+double SdlClient::GetElapsedTime(Uint64 previous, Uint64& now)
+{
+	now = SDL_GetPerformanceCounter();
+	return (double)((now - previous) * 1000 / (double)SDL_GetPerformanceFrequency());
+}
+
 void SdlClient::InitScreenSurface()
 {
 	std::unique_ptr<SDL_Surface, SdlDeleter> screenSurface(SDL_GetWindowSurface(this->window_), SdlDeleter());

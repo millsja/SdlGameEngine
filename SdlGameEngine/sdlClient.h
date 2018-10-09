@@ -40,6 +40,7 @@ public:
 	SDL_Texture* LoadTexture(const char* path, int& w, int& h, Color* alphaKey);
 
 	// utilities
+	double GetElapsedTime(Uint64 previousTime, Uint64& currentTime);
 	void Delay(int ms);
 	int GetWindowHeight();
 	int GetWindowWidth();
