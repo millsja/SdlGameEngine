@@ -22,8 +22,8 @@ public:
 		int y,
 		int w,
 		int h,
-		struct Velocity xVelocity,
-		struct Velocity yVelocity,
+		double xVelocity,
+		double yVelocity,
 		bool accelerate,
 		float maxSpeed);
 	void SetLocation(int x, int y) { this->dest_.x = x; this->dest_.y = y; }
@@ -45,8 +45,8 @@ private:
 	Uint64 timeOfLastYUpdate_;
 	// float xCharge_;
 	// float yCharge_;
-	struct Velocity xVelocity_; // pixel/frame
-	struct Velocity yVelocity_; // pixel/frame
+	double xVelocity_; // pixel/frame
+	double yVelocity_; // pixel/frame
 	struct Coords lastLocation_;
 	int textureId_;
 	SDL_Rect dest_;

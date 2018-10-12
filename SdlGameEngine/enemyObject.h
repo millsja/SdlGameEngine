@@ -7,25 +7,28 @@
 #include "iBallObserver.h"
 #include "iEveryFrame.h"
 #include "SDL.h"
+#include "sdlClient.h"
 
 class EnemyObject : public IGameObject, public ICollideable, public IHasVelocity, public IBallObserver, public IEveryFrame
 {
 public:
-	EnemyObject(int textureId, int x, int y, int w, int h, float velocityCoefficient);
+	EnemyObject(SdlClient* sdlClient, int textureId, int x, int y, int w, int h, float velocityCoefficient);
 	void SetLocation(int x, int y);
 	SDL_Rect* GetDestination() { return &(this->dest_); }
 	int GetTextureId() { return this->textureId_; };
 	void ResolveCollision(ICollideable* object);
-	float GetXVelocity() { return this->xVelocity_; }
-	float GetYVelocity() { return this->yVelocity_; }
+	double GetXVelocity() { return this->xVelocity_; }
+	double GetYVelocity() { return this->yVelocity_; }
 	void Update(int x, int y);
 	void HandleNewFrame();
 private:
+	SdlClient* sdlClient_;
 	float velocityCoefficient_;
-	float xCharge_;
-	float yCharge_;
-	float xVelocity_;
-	float yVelocity_;
+	// float xCharge_;
+	// float yCharge_;
+	Uint64 timeOfLastVelocityCheck_;
+	double xVelocity_;
+	double yVelocity_;
 	struct Coords locationAsOfLastFrame_;
 	bool Moved(int x, int y);
 	// struct Coords lastLocation_;

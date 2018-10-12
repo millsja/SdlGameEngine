@@ -7,11 +7,11 @@
 
 #define null NULL
 
-struct Velocity
-{
-	int pixels;
-	double ms;
-};
+// struct Velocity
+// {
+// 	int pixels;
+// 	double ms;
+// };
 
 struct Coords
 {

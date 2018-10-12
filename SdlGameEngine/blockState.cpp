@@ -25,20 +25,20 @@ BlockState::BlockState(SdlClient* sdlClient, int maxPoints, bool accelerate, flo
 	Color white = { 0xFF, 0xFF, 0xFF, 0xFF };
 	SDL_Texture* sprite = this->sdlClient_->LoadTexture("C:\\Users\\James\\source\\repos\\SdlGameEngine\\Debug\\breakout_player.png", w, h, &white);
 	this->collection_.AddTexture(TextureIdEnum::SPRITE_1, sprite);
-	this->objects_.push_back(std::unique_ptr<IGameObject>(new PlayerObject(TextureIdEnum::SPRITE_1, windowW/2 - w/2, windowH - w/2 - 25, w, h)));
+	this->objects_.push_back(std::unique_ptr<IGameObject>(new PlayerObject(this->sdlClient_, TextureIdEnum::SPRITE_1, windowW/2 - w/2, windowH - w/2 - 25, w, h)));
 
 	// load enemy 
 	w = 0, h = 0;
 	SDL_Texture* enemySprite = this->sdlClient_->LoadTexture("C:\\Users\\James\\source\\repos\\SdlGameEngine\\Debug\\breakout_player.png", w, h, &white);
 	this->collection_.AddTexture(TextureIdEnum::SPRITE_3, enemySprite);
-	EnemyObject* enemy = new EnemyObject(TextureIdEnum::SPRITE_3, windowW / 2 - w / 2, 50, w, h, 0.15);
+	EnemyObject* enemy = new EnemyObject(this->sdlClient_, TextureIdEnum::SPRITE_3, windowW / 2 - w / 2, 50, w, h, 50);
 	this->objects_.push_back(std::unique_ptr<IGameObject>(enemy));
 
 	// load ball 
 	w = 0, h = 0;
 	SDL_Texture* ballSprite = this->sdlClient_->LoadTexture("C:\\Users\\James\\source\\repos\\SdlGameEngine\\Debug\\ball.png", w, h, &white);
 	this->collection_.AddTexture(TextureIdEnum::SPRITE_2, ballSprite);
-	BallObject* ball = new BallObject(this->sdlClient_, TextureIdEnum::SPRITE_2, windowW / 2 - w / 2, windowH / 2, w, h, { 0, 0 }, { 1, 5 }, accelerate, maxYSpeed);
+	BallObject* ball = new BallObject(this->sdlClient_, TextureIdEnum::SPRITE_2, windowW / 2 - w / 2, windowH / 2, w, h, 0.0, 100, accelerate, maxYSpeed);
 	ball->AttachObserver(enemy);
 	this->objects_.push_back(std::unique_ptr<IGameObject>(ball));
 

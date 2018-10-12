@@ -1,7 +1,8 @@
 #include "enemyObject.h"
 
-EnemyObject::EnemyObject(int textureId, int x, int y, int w, int h, float velocityCoefficient)
+EnemyObject::EnemyObject(SdlClient* sdlClient, int textureId, int x, int y, int w, int h, float velocityCoefficient)
 {
+	this->sdlClient_ = sdlClient;
 	this->velocityCoefficient_ = velocityCoefficient;
 	this->textureId_ = textureId;
 	this->dest_.x = x;
@@ -10,10 +11,11 @@ EnemyObject::EnemyObject(int textureId, int x, int y, int w, int h, float veloci
 	this->dest_.h = h;
 	this->locationAsOfLastFrame_.x = x;
 	this->locationAsOfLastFrame_.y = y;
-	this->xCharge_ = 0;
-	this->yCharge_ = 0;
+	// this->xCharge_ = 0;
+	// this->yCharge_ = 0;
 	this->xVelocity_ = 0;
 	this->yVelocity_ = 0;
+	this->sdlClient_->GetElapsedTime(0, this->timeOfLastVelocityCheck_);
 }
 
 void EnemyObject::SetLocation(int x, int y)
@@ -59,13 +61,23 @@ bool EnemyObject::Moved(int x, int y)
 
 void EnemyObject::HandleNewFrame()
 {
-	this->xCharge_ += this->xVelocity_;
+	Uint64 now = 0;
+	double elapsed = this->sdlClient_->GetElapsedTime(this->timeOfLastVelocityCheck_, now);
 
-	if (fabs(this->xCharge_) >= 1)
+	double vX = IHasVelocity::GetTimePerPixel(this->xVelocity_);
+	if (fabs(this->xVelocity_) > 1 && elapsed >= fabs(vX))
 	{
-		this->locationAsOfLastFrame_.x = this->dest_.x;
-		this->dest_.x += this->xCharge_;
-		this->xCharge_ *= 0;
+		if (vX < 0)
+		{
+			vX *= 1.3;
+		}
+
+		this->dest_.x += (elapsed / vX);
+		this->timeOfLastVelocityCheck_ = now;
+	}
+	else if (fabs(this->xVelocity_) <= 1)
+	{
+		this->timeOfLastVelocityCheck_ = now;
 	}
 }
 
@@ -73,7 +85,7 @@ void EnemyObject::Update(int x, int y)
 {
 	if (x > this->dest_.x + this->dest_.w / 2)
 	{
-		this->xVelocity_ = this->velocityCoefficient_;
+		this->xVelocity_ = 1 * this->velocityCoefficient_;
 	}
 	else if (x < this->dest_.x + this->dest_.w / 2)
 	{
@@ -82,6 +94,5 @@ void EnemyObject::Update(int x, int y)
 	else
 	{
 		this->xVelocity_ = 0;
-		this->xCharge_ = 0;
 	}
 }

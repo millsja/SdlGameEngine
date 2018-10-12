@@ -1,7 +1,8 @@
 #include "playerObject.h"
 
-PlayerObject::PlayerObject(int textureId, int x, int y, int w, int h)
+PlayerObject::PlayerObject(SdlClient* sdlClient, int textureId, int x, int y, int w, int h)
 {
+	this->sdlClient_ = sdlClient;
 	this->textureId_ = textureId;
 	this->dest_.x = x;
 	this->dest_.y = y;
@@ -11,15 +12,37 @@ PlayerObject::PlayerObject(int textureId, int x, int y, int w, int h)
 	// this->lastLocation_.y = y;
 	this->locationAsOfLastFrame_.x = x;
 	this->locationAsOfLastFrame_.y = y;
+	this->xVelocity_ = 0;
+	this->yVelocity_ = 0;
+	this->sdlClient_->GetElapsedTime(0, this->velocityLastCheck_);
+	this->moved_ = false;
 }
 
 void PlayerObject::HandleEvents(SDL_Event* event, const Uint8* keystates)
 {
 	if (event->type == SDL_MOUSEMOTION)
 	{
+		this->moved_ = true;
+
 		int x = 0, y = 0;
 		SDL_GetMouseState(&x, &y);
 		this->dest_.x = x - (this->dest_.w / 2);
+
+		// Uint64 now = 0;
+		// double elapsed = this->sdlClient_->GetElapsedTime(this->velocityLastCheck_, now);
+		// this->velocityLastCheck_ = now;
+
+		int diff = this->dest_.x - this->locationAsOfLastFrame_.x;
+		int absdiff = fabs(diff);
+		if (absdiff > 1)
+		{
+			this->xVelocity_ = fmin(log(absdiff) * 5, 500);
+			this->xVelocity_ *= diff / absdiff;
+		}
+		// this->xVelocity_.ms = 0.85 * this->xVelocity_.ms + 0.25 * elapsed;
+
+		this->locationAsOfLastFrame_.x = this->dest_.x;
+		this->locationAsOfLastFrame_.y = this->dest_.y;
 	}
 }
 
@@ -31,9 +54,8 @@ void PlayerObject::SetLocation(int x, int y)
 
 void PlayerObject::ResolveCollision(ICollideable* object)
 {
-	if (this->Moved(this->dest_.x, this->dest_.y))
+	if (this->moved_)
 	{
-		// SDL_Rect* otherD = object->GetDestination();
 		if (this->locationAsOfLastFrame_.x + this->dest_.w <= object->GetDestination()->x
 			&& this->dest_.x + this->dest_.w > object->GetDestination()->x)
 		{
@@ -45,40 +67,18 @@ void PlayerObject::ResolveCollision(ICollideable* object)
 		{
 			this->dest_.x += 1;
 		}
-
-		if (this->locationAsOfLastFrame_.y >= object->GetDestination()->y + object->GetDestination()->h
-			&& this->dest_.y < object->GetDestination()->y + object->GetDestination()->h)
-		{
-			this->dest_.y += 1;
-		}
-
-		if ((this->locationAsOfLastFrame_.y + this->dest_.h) <= object->GetDestination()->y
-			&& (this->dest_.y + this->dest_.h) > object->GetDestination()->y)
-		{
-			this->dest_.y -= 1;
-		}
-
-		// if (this->lastLocation_.x < otherD->x)
-		// {
-		// 	this->dest_.x = otherD->x - 1 - this->dest_.w;
-		// }
-		// else if (this->lastLocation_.x > otherD->x)
-		// {
-		// 	this->dest_.x = otherD->x + otherD->w + 1;
-		// }
 	}
-}
-
-bool PlayerObject::Moved(int x, int y)
-{
-	return !(x == this->locationAsOfLastFrame_.x && y == this->locationAsOfLastFrame_.y);
 }
 
 void PlayerObject::HandleNewFrame()
 {
-	this->xVelocity_ = 0.25 * (this->dest_.x - this->locationAsOfLastFrame_.x) + .85 * this->xVelocity_;
-	this->yVelocity_ = 0.25 * (this->dest_.y - this->locationAsOfLastFrame_.y) + .85 * this->yVelocity_;
+	Uint64 now = 0;
+	double elapsed = this->sdlClient_->GetElapsedTime(this->velocityLastCheck_, now);
 
-	this->locationAsOfLastFrame_.x = this->dest_.x;
-	this->locationAsOfLastFrame_.y = this->dest_.y;
+	if (!this->moved_ && elapsed > 100)
+	{
+		this->xVelocity_ *= 0.8;
+	}
+
+	this->moved_ = false;
 }

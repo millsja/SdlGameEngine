@@ -7,8 +7,8 @@ BallObject::BallObject(
 	int y,
 	int w,
 	int h,
-	struct Velocity xVelocity,
-	struct Velocity yVelocity,
+	double xVelocity,
+	double yVelocity,
 	bool accelerate,
 	float maxSpeed)
 {
@@ -32,50 +32,52 @@ BallObject::BallObject(
 
 void BallObject::ResolveCollision(ICollideable* object)
 {
-	if (this->xVelocity_.pixels > 0
+	if (this->xVelocity_ > 0
 		&& this->lastLocation_.x + this->dest_.w <= object->GetDestination()->x
 		&& this->dest_.x + this->dest_.w > object->GetDestination()->x)
 	{
 		this->dest_.x -= 1;
-		this->xVelocity_.pixels = -1 * this->xVelocity_.pixels;
-		this->xVelocity_.ms = 1.25 * this->xVelocity_.ms;
+		this->xVelocity_ *= -1;
 	}
 
-	if (this->xVelocity_.pixels < 0 
+	if (this->xVelocity_ < 0 
 		&& this->lastLocation_.x >= object->GetDestination()->x + object->GetDestination()->w
 		&& this->dest_.x < object->GetDestination()->x + object->GetDestination()->w)
 	{
 		this->dest_.x += 1;
-		this->xVelocity_.pixels = -1 * this->xVelocity_.pixels;
-		this->xVelocity_.ms = 1.25 * this->xVelocity_.ms;
+		this->xVelocity_ *= -1;
 	}
 
-	if (this->yVelocity_.pixels < 0
+	if (this->yVelocity_ < 0
 		&& this->lastLocation_.y >= object->GetDestination()->y + object->GetDestination()->h
 		&& this->dest_.y < object->GetDestination()->y + object->GetDestination()->h)
 	{
 		this->dest_.y += 1;
-		this->yVelocity_.pixels = -1 * this->yVelocity_.pixels;
+		this->yVelocity_ *= -1;
 	}
 
-	if (this->yVelocity_.pixels > 0
+	if (this->yVelocity_ > 0
 		&& (this->lastLocation_.y + this->dest_.h) <= object->GetDestination()->y
 		&& (this->dest_.y + this->dest_.h) > object->GetDestination()->y)
 	{
 		this->dest_.y -= 1;
-		this->yVelocity_.pixels = -1 * this->yVelocity_.pixels;
+		this->yVelocity_ *= -1;
 	}
 
-	// IHasVelocity* h = null;
-	// if (h = dynamic_cast<IHasVelocity*>(object))
-	// {
-	// 	this->xVelocity_ += .25 * h->GetXVelocity();
-	// }
+	IHasVelocity* h = null;
+	if (h = dynamic_cast<IHasVelocity*>(object))
+	{
+		this->xVelocity_ +=  h->GetXVelocity();
+	}
+	else
+	{
+		this->xVelocity_ *= 0.75;
+	}
 
-	// if (this->accelerate_ && this->yVelocity_ < this->maxSpeed_)
-	// {
-	// 	this->yVelocity_ *= 1.010;
-	// }
+	if (this->accelerate_ && this->yVelocity_ < this->maxSpeed_)
+	{
+		this->yVelocity_ *= 1.01;
+	}
 }
 
 void BallObject::HandleNewFrame()
@@ -84,19 +86,34 @@ void BallObject::HandleNewFrame()
 	double msElapsedSinceX = this->sdlClient_->GetElapsedTime(this->timeOfLastXUpdate_, now);
 	double msElapsedSinceY = this->sdlClient_->GetElapsedTime(this->timeOfLastYUpdate_, now);
 
-	if (this->xVelocity_.ms > 0 && msElapsedSinceX >= this->xVelocity_.ms)
+	double vX = IHasVelocity::GetTimePerPixel(this->xVelocity_);
+	double vY = IHasVelocity::GetTimePerPixel(this->yVelocity_);
+	if (fabs(this->xVelocity_) > 1 && msElapsedSinceX >= fabs(vX))
 	{
 		this->lastLocation_.x = this->dest_.x;
-		this->dest_.x += (msElapsedSinceX / this->xVelocity_.ms) * this->xVelocity_.pixels;
+		this->dest_.x += (msElapsedSinceX / vX);
 		this->Notify();
 		this->timeOfLastXUpdate_ = now;
 	}
-
-	if (this->yVelocity_.ms > 0 && msElapsedSinceY >= this->yVelocity_.ms)
+	else if (fabs(this->xVelocity_) <= 1)
 	{
+		this->timeOfLastXUpdate_ = now;
+	}
+
+	if (fabs(this->yVelocity_) > 1 && msElapsedSinceY >= fabs(vY))
+	{
+		if (vY < 0)
+		{
+			vY *= 1.3;
+		}
+
 		this->lastLocation_.y = this->dest_.y;
-		this->dest_.y += (msElapsedSinceY / this->yVelocity_.ms) * this->yVelocity_.pixels;
+		this->dest_.y += (msElapsedSinceY / vY);
 		this->Notify();
+		this->timeOfLastYUpdate_ = now;
+	}
+	else if (fabs(this->yVelocity_) <= 1)
+	{
 		this->timeOfLastYUpdate_ = now;
 	}
 }

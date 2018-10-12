@@ -13,10 +13,10 @@ const string FONT_PATH = "C:\\Users\\James\\source\\repos\\SdlGameEngine\\Debug\
 
 int main( int argc, char* args[] )
 {
-	SdlClient client = { SCREEN_WIDTH, SCREEN_HEIGHT, NAME, false };
+	SdlClient client = { SCREEN_WIDTH, SCREEN_HEIGHT, NAME, true };
 	client.SetUpTextRenderer(FONT_PATH, 28);
 	StateStack stack;
-	BlockState state(&client, 15, true, 0.35);
+	BlockState state(&client, 15, true, 200);
 
 	stack.Push(&state);
 	stack.Run();
