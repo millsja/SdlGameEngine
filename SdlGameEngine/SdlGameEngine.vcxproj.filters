@@ -34,6 +34,12 @@
     <ClCompile Include="textRenderer.cpp">
       <Filter>Engine\Source</Filter>
     </ClCompile>
+    <ClCompile Include="mainMenuState.cpp">
+      <Filter>Game\Source</Filter>
+    </ClCompile>
+    <ClCompile Include="menuItem.cpp">
+      <Filter>Engine\Source</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="boundaryObject.h">
@@ -81,12 +87,6 @@
     <ClInclude Include="iHasVelocity.h">
       <Filter>Engine\Headers</Filter>
     </ClInclude>
-    <ClInclude Include="iBallObserver.h">
-      <Filter>Engine\Headers</Filter>
-    </ClInclude>
-    <ClInclude Include="iObservableBall.h">
-      <Filter>Engine\Headers</Filter>
-    </ClInclude>
     <ClInclude Include="enemyObject.h">
       <Filter>Game\Headers</Filter>
     </ClInclude>
@@ -95,6 +95,18 @@
     </ClInclude>
     <ClInclude Include="textRenderer.h">
       <Filter>Engine\Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="mainMenuState.h">
+      <Filter>Game\Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="menuItem.h">
+      <Filter>Engine\Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="iBallObserver.h">
+      <Filter>Game\Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="iObservableBall.h">
+      <Filter>Game\Headers</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

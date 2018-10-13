@@ -1,7 +1,8 @@
 #include "scoreKeeper.h"
 
-ScoreKeeper::ScoreKeeper(SdlClient* sdlClient)
+ScoreKeeper::ScoreKeeper(SdlClient* sdlClient, SDL_Color textColor)
 {
+	this->textColor_ = textColor;
 	this->cachedW_ = 0;
 	this->cachedH_ = 0;
 	this->sdlClient_ = sdlClient;
@@ -13,7 +14,11 @@ ScoreKeeper::ScoreKeeper(SdlClient* sdlClient)
 
 GameStatusEnum ScoreKeeper::GetGameStatus()
 {
-	if (this->enemyPoints_ >= this->winThreshold_)
+	if (winThreshold_ < 0)
+	{
+		return GameStatusEnum::INCOMPLETE;
+	}
+	else if (this->enemyPoints_ >= this->winThreshold_)
 	{
 		return GameStatusEnum::ENEMY_VICTORY;
 	}
@@ -44,8 +49,7 @@ SDL_Texture* ScoreKeeper::GetScoreTexture(int& w, int& h)
 		std::ostringstream scoreStream;
 		scoreStream << this->GetPlayerScore() << " | " << this->GetEnemyScore();
 		std::string scores = scoreStream.str();
-		SDL_Color textColor = { 0, 0, 0};
-		this->cachedScoreTexture_ = std::unique_ptr<SDL_Texture, SdlDeleter>(this->sdlClient_->GetTextureFromText(scores, textColor, this->cachedW_, this->cachedH_), SdlDeleter());
+		this->cachedScoreTexture_ = std::unique_ptr<SDL_Texture, SdlDeleter>(this->sdlClient_->GetTextureFromText(scores, FontSizeEnum::P, this->textColor_, this->cachedW_, this->cachedH_), SdlDeleter());
 	}
 
 	w = this->cachedW_;

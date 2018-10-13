@@ -1,13 +1,14 @@
 #include "blockState.h"
 
 BlockState::BlockState(SdlClient* sdlClient, int maxPoints, bool accelerate, float maxYSpeed)
-	: scoreKeeper_(sdlClient)
+	: scoreKeeper_(sdlClient, SDL_Color{ 0xFF, 0xFF, 0xFF, 0xFF })
 {
 	// initialize sdl, window
 	this->sdlClient_ = sdlClient;
 	this->sdlClient_->HideMouse(true);
-	struct Color gameboy = {(Uint8)216, (Uint8)240, (Uint8)202, 0xFF};
-	this->sdlClient_->RenderSetClear(&gameboy);
+	// struct Color gameboy = {(Uint8)216, (Uint8)240, (Uint8)202, 0xFF};
+	struct Color black = { 0, 0, 0, 0xFF };
+	this->sdlClient_->RenderSetClear(black);
 	this->sdlClient_->RenderClear();
 	this->sdlClient_->Update();
 
@@ -34,11 +35,13 @@ BlockState::BlockState(SdlClient* sdlClient, int maxPoints, bool accelerate, flo
 	EnemyObject* enemy = new EnemyObject(this->sdlClient_, TextureIdEnum::SPRITE_3, windowW / 2 - w / 2, 50, w, h, 50);
 	this->objects_.push_back(std::unique_ptr<IGameObject>(enemy));
 
-	// load ball 
+	// load ball
 	w = 0, h = 0;
+	int yDirection = this->sdlClient_->GetRandom() % 2 * -2 + 1;
+	int xDirection = this->sdlClient_->GetRandom() % 2 * -2 + 1;
 	SDL_Texture* ballSprite = this->sdlClient_->LoadTexture("C:\\Users\\James\\source\\repos\\SdlGameEngine\\Debug\\ball.png", w, h, &white);
 	this->collection_.AddTexture(TextureIdEnum::SPRITE_2, ballSprite);
-	BallObject* ball = new BallObject(this->sdlClient_, TextureIdEnum::SPRITE_2, windowW / 2 - w / 2, windowH / 2, w, h, 0.0, 100, accelerate, maxYSpeed);
+	BallObject* ball = new BallObject(this->sdlClient_, TextureIdEnum::SPRITE_2, windowW / 2 - w / 2, windowH / 2, w, h, xDirection * 25, yDirection * 100, accelerate, maxYSpeed);
 	ball->AttachObserver(enemy);
 	this->objects_.push_back(std::unique_ptr<IGameObject>(ball));
 
@@ -93,8 +96,61 @@ void BlockState::Start()
 
 		this->collisionDetector_.FindCollisions();
 
-		if (this->scoreKeeper_.GetGameStatus() != GameStatusEnum::INCOMPLETE)
+		GameStatusEnum gameStatus = this->scoreKeeper_.GetGameStatus();
+		if (gameStatus == GameStatusEnum::ENEMY_VICTORY)
 		{
+			this->sdlClient_->RenderClear();
+			int hw = 0, hh = 0;
+			int sw = 0, sh = 0;
+			std::unique_ptr<SDL_Texture, SdlDeleter> text = std::unique_ptr<SDL_Texture, SdlDeleter>(this->sdlClient_->GetTextureFromText("YOU LOST!", FontSizeEnum::H1, SDL_Color{ 255, 0, 0 }, hw, hh), SdlDeleter());
+			this->sdlClient_->RenderTexture(text.get(), this->sdlClient_->GetWindowWidth() / 2 - hw / 2, this->sdlClient_->GetWindowHeight() / 10 * 3, hw, hh);
+			std::unique_ptr<SDL_Texture, SdlDeleter> subText = std::unique_ptr<SDL_Texture, SdlDeleter>(this->sdlClient_->GetTextureFromText("(how sad)", FontSizeEnum::P, SDL_Color{ 255, 0, 0 }, sw, sh), SdlDeleter());
+			this->sdlClient_->RenderTexture(subText.get(), this->sdlClient_->GetWindowWidth() / 2 - sw / 2, this->sdlClient_->GetWindowHeight() / 10 * 3 + hh, sw, sh);
+			this->sdlClient_->Update();
+			while (cont)
+			{
+				while (SDL_PollEvent(&e) != 0)
+				{
+					switch (e.type)
+					{
+					case SDL_MOUSEBUTTONDOWN:
+						cont = false;
+						break;
+					case SDL_KEYDOWN:
+						cont = false;
+						break;
+					}
+				}
+			}
+			cont = false;
+			break;
+		}
+		else if (gameStatus == GameStatusEnum::PLAYER_VICTORY)
+		{
+			int hw = 0, hh = 0;
+			int sw = 0, sh = 0;
+			this->sdlClient_->RenderClear();
+			std::unique_ptr<SDL_Texture, SdlDeleter> text = std::unique_ptr<SDL_Texture, SdlDeleter>(this->sdlClient_->GetTextureFromText("YOU WON!", FontSizeEnum::H1, SDL_Color{ 118, 238, 0 }, hw, hh), SdlDeleter());
+			this->sdlClient_->RenderTexture(text.get(), this->sdlClient_->GetWindowWidth() / 2 - hw / 2, this->sdlClient_->GetWindowHeight() / 10 * 3, hw, hh);
+			std::unique_ptr<SDL_Texture, SdlDeleter> subText = std::unique_ptr<SDL_Texture, SdlDeleter>(this->sdlClient_->GetTextureFromText("(how nice)", FontSizeEnum::P, SDL_Color{ 118, 238, 0 }, sw, sh), SdlDeleter());
+			this->sdlClient_->RenderTexture(subText.get(), this->sdlClient_->GetWindowWidth() / 2 - sw / 2, this->sdlClient_->GetWindowHeight() / 10 * 3 + hh, sw, sh);
+			this->sdlClient_->Update();
+			while (cont)
+			{
+				while (SDL_PollEvent(&e) != 0)
+				{
+					switch (e.type)
+					{
+					case SDL_MOUSEBUTTONDOWN:
+						cont = false;
+						break;
+					case SDL_KEYDOWN:
+						cont = false;
+						break;
+					}
+				}
+			}
+			this->sdlClient_->RenderSetClear(Color{ 0, 0, 0, 0 });
 			cont = false;
 			break;
 		}

@@ -67,12 +67,12 @@ void EnemyObject::HandleNewFrame()
 	double vX = IHasVelocity::GetTimePerPixel(this->xVelocity_);
 	if (fabs(this->xVelocity_) > 1 && elapsed >= fabs(vX))
 	{
-		if (vX < 0)
-		{
-			vX *= 1.3;
-		}
+		// if (vX < 0)
+		// {
+		// 	vX *= 1.3;
+		// }
 
-		this->dest_.x += (elapsed / vX);
+		this->dest_.x += (int)(elapsed / vX);
 		this->timeOfLastVelocityCheck_ = now;
 	}
 	else if (fabs(this->xVelocity_) <= 1)

@@ -128,6 +128,8 @@
     <ClCompile Include="blockState.cpp" />
     <ClCompile Include="enemyObject.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="mainMenuState.cpp" />
+    <ClCompile Include="menuItem.cpp" />
     <ClCompile Include="playerObject.cpp" />
     <ClCompile Include="scoreKeeper.cpp" />
     <ClCompile Include="sdlClient.cpp" />
@@ -149,6 +151,8 @@
     <ClInclude Include="iGameObject.h" />
     <ClInclude Include="iObservableBall.h" />
     <ClInclude Include="iBallObserver.h" />
+    <ClInclude Include="mainMenuState.h" />
+    <ClInclude Include="menuItem.h" />
     <ClInclude Include="playerObject.h" />
     <ClInclude Include="scoreKeeper.h" />
     <ClInclude Include="stateStack.h" />

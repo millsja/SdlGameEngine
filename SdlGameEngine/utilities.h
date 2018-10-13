@@ -1,9 +1,14 @@
 #ifndef UTILITIES_H
 #define UTILITIES_H
 
+#include <string>
 #include <stdint.h>
-#include "SDL.h"
 #include "SDL_ttf.h"
+
+struct SDL_Window;
+struct SDL_Renderer;
+struct SDL_Texture;
+struct SDL_Surface;
 
 #define null NULL
 

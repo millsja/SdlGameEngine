@@ -1,7 +1,9 @@
 #include "sdlClient.h"
 
-SdlClient::SdlClient(const int screenWidth, const int screenHeight, const std::string name, bool fullscreen)
+SdlClient::SdlClient(const int screenWidth, const int screenHeight, std::string const& name, bool fullscreen)
 {
+	srand(time(null));
+	this->mouseHidden_ = false;
 	this->window_ = null;
 	this->InitWindow(screenWidth, screenHeight, name, fullscreen);
 	this->InitScreenSurface();
@@ -17,14 +19,19 @@ SdlClient::~SdlClient()
 	SDL_Quit();
 }
 
-void SdlClient::SetUpTextRenderer(const std::string fontPath, int size)
+int SdlClient::GetRandom()
+{
+	return rand();
+}
+
+void SdlClient::SetUpTextRenderer(std::string const& fontPath, int size)
 {
 	this->textRenderer_.Init(fontPath, size);
 }
 
-SDL_Texture* SdlClient::GetTextureFromText(std::string text, SDL_Color color, int& w, int& h)
+SDL_Texture* SdlClient::GetTextureFromText(std::string const& text, int fontSize, SDL_Color color, int& w, int& h)
 {
-	return this->textRenderer_.RenderText(this->renderer_, text, color, w, h);
+	return this->textRenderer_.RenderText(this->renderer_, fontSize, text, color, w, h);
 }
 
 void SdlClient::BlitStretched(SDL_Surface* surface)
@@ -68,7 +75,7 @@ void SdlClient::InitScreenSurface()
 	SDL_UpdateWindowSurface(this->window_);
 }
 
-void SdlClient::InitWindow(const int screenWidth, const int screenHeight, const std::string name, bool fullscreen)
+void SdlClient::InitWindow(const int screenWidth, const int screenHeight, std::string const& name, bool fullscreen)
 {
 	this->window_ = SDL_CreateWindow(
 		name.c_str(),
@@ -97,9 +104,9 @@ void SdlClient::InitWindow(const int screenWidth, const int screenHeight, const 
 	SDL_SetRenderDrawColor(this->renderer_, 0xFF, 0xFF, 0xFF, 0xFF);
 }
 
-SDL_Surface* SdlClient::LoadSurface(const char* path)
+SDL_Surface* SdlClient::LoadSurface(std::string const& path)
 {
-	std::unique_ptr<SDL_Surface, SdlDeleter> loadedSurface(IMG_Load(path), SdlDeleter());
+	std::unique_ptr<SDL_Surface, SdlDeleter> loadedSurface(IMG_Load(path.c_str()), SdlDeleter());
 	SDL_Surface* optimizedSurface = null;
 	if (loadedSurface.get() != null)
 	{
@@ -110,15 +117,15 @@ SDL_Surface* SdlClient::LoadSurface(const char* path)
 	}
 	else
 	{
-		printf("Error loading image: \n%s\n%s\n", path, IMG_GetError());
+		printf("Error loading image: \n%s\n%s\n", path.c_str(), IMG_GetError());
 		return null;
 	}
 }
 
-SDL_Texture* SdlClient::LoadTexture(const char* path, int& w, int& h, Color* alphaKey = null)
+SDL_Texture* SdlClient::LoadTexture(std::string const& path, int& w, int& h, Color* alphaKey = null)
 {
 	SDL_Texture* texture = null;
-	std::unique_ptr<SDL_Surface, SdlDeleter> surface(this->LoadSurface(path), SdlDeleter());
+	std::unique_ptr<SDL_Surface, SdlDeleter> surface(this->LoadSurface(path.c_str()), SdlDeleter());
 	if (surface.get() != null)
 	{
 		w = surface.get()->w;
@@ -192,12 +199,18 @@ void SdlClient::RenderSetViewpoint(int x, int y, int w, int h)
 	SDL_RenderSetViewport(this->renderer_, &viewport);
 }
 
-void SdlClient::RenderSetClear(Color* color)
+void SdlClient::RenderSetClear(Color const& color)
 {
-	SDL_SetRenderDrawColor(this->renderer_, color->r, color->g, color->b, color->a);
+	SDL_SetRenderDrawColor(this->renderer_, color.r, color.g, color.b, color.a);
+}
+
+bool SdlClient::MouseHidden()
+{
+	return this->mouseHidden_;
 }
 
 void SdlClient::HideMouse(bool hide)
 {
+	this->mouseHidden_ = hide;
 	SDL_ShowCursor(!hide);
 }

@@ -67,7 +67,8 @@ void BallObject::ResolveCollision(ICollideable* object)
 	IHasVelocity* h = null;
 	if (h = dynamic_cast<IHasVelocity*>(object))
 	{
-		this->xVelocity_ +=  h->GetXVelocity();
+		double newV = h->GetXVelocity();
+		this->xVelocity_ =  newV != 0 ? newV : this->xVelocity_;
 	}
 	else
 	{
@@ -78,6 +79,12 @@ void BallObject::ResolveCollision(ICollideable* object)
 	{
 		this->yVelocity_ *= 1.01;
 	}
+}
+
+void BallObject::Reset()
+{
+	this->dest_.x = this->initialX_;
+	this->dest_.y = this->initialY_;
 }
 
 void BallObject::HandleNewFrame()
@@ -91,7 +98,7 @@ void BallObject::HandleNewFrame()
 	if (fabs(this->xVelocity_) > 1 && msElapsedSinceX >= fabs(vX))
 	{
 		this->lastLocation_.x = this->dest_.x;
-		this->dest_.x += (msElapsedSinceX / vX);
+		this->dest_.x += (int)(msElapsedSinceX / vX);
 		this->Notify();
 		this->timeOfLastXUpdate_ = now;
 	}
@@ -102,13 +109,13 @@ void BallObject::HandleNewFrame()
 
 	if (fabs(this->yVelocity_) > 1 && msElapsedSinceY >= fabs(vY))
 	{
-		if (vY < 0)
-		{
-			vY *= 1.3;
-		}
+		// if (vY < 0)
+		// {
+		// 	vY *= 1.3;
+		// }
 
 		this->lastLocation_.y = this->dest_.y;
-		this->dest_.y += (msElapsedSinceY / vY);
+		this->dest_.y += (int)(msElapsedSinceY / vY);
 		this->Notify();
 		this->timeOfLastYUpdate_ = now;
 	}

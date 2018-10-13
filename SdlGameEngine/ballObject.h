@@ -34,6 +34,7 @@ public:
 	void AttachObserver(IBallObserver* observer) { this->observers_.push_back(observer); }
 	void DetachObserver(IBallObserver* observer) { this->observers_.erase(std::remove(this->observers_.begin(), this->observers_.end(), observer)); };
 	void Notify();
+	void Reset();
 private:
 	SdlClient* sdlClient_;
 	int initialX_;

@@ -33,10 +33,10 @@ void PlayerObject::HandleEvents(SDL_Event* event, const Uint8* keystates)
 		// this->velocityLastCheck_ = now;
 
 		int diff = this->dest_.x - this->locationAsOfLastFrame_.x;
-		int absdiff = fabs(diff);
+		double absdiff = fabs(diff);
 		if (absdiff > 1)
 		{
-			this->xVelocity_ = fmin(log(absdiff) * 5, 500);
+			this->xVelocity_ = fmin(log(absdiff) * 50, 500);
 			this->xVelocity_ *= diff / absdiff;
 		}
 		// this->xVelocity_.ms = 0.85 * this->xVelocity_.ms + 0.25 * elapsed;

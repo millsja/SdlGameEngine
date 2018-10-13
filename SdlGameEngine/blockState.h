@@ -19,8 +19,6 @@
 #include <sstream>
 #include <memory>
 
-#define string std::string
-
 enum TextureIdEnum { NO_RENDER = 0, SPRITE_1 = 1, SPRITE_2 = 2, SPRITE_3 = 3 };
 
 class BlockState : public IGameState
