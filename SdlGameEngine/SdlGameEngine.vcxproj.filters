@@ -40,6 +40,9 @@
     <ClCompile Include="menuItem.cpp">
       <Filter>Engine\Source</Filter>
     </ClCompile>
+    <ClCompile Include="soundManager.cpp">
+      <Filter>Engine\Source</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="boundaryObject.h">
@@ -107,6 +110,9 @@
     </ClInclude>
     <ClInclude Include="iObservableBall.h">
       <Filter>Game\Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="soundManager.h">
+      <Filter>Engine\Headers</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

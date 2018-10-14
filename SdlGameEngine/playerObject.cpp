@@ -1,7 +1,9 @@
 #include "playerObject.h"
 
-PlayerObject::PlayerObject(SdlClient* sdlClient, int textureId, int x, int y, int w, int h)
+PlayerObject::PlayerObject(SdlClient* sdlClient, int textureId, int x, int y, int w, int h, SoundManager* soundManager, int soundId)
 {
+	this->soundId_ = soundId;
+	this->soundManager_ = soundManager;
 	this->sdlClient_ = sdlClient;
 	this->textureId_ = textureId;
 	this->dest_.x = x;
@@ -54,6 +56,11 @@ void PlayerObject::SetLocation(int x, int y)
 
 void PlayerObject::ResolveCollision(ICollideable* object)
 {
+	if (dynamic_cast<BallObject*>(object))
+	{
+		this->soundManager_->PlaySound(this->soundId_);
+	}
+
 	if (this->moved_)
 	{
 		if (this->locationAsOfLastFrame_.x + this->dest_.w <= object->GetDestination()->x

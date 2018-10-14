@@ -1,7 +1,8 @@
 #include "blockState.h"
 
 BlockState::BlockState(SdlClient* sdlClient, int maxPoints, bool accelerate, float maxYSpeed)
-	: scoreKeeper_(sdlClient, SDL_Color{ 0xFF, 0xFF, 0xFF, 0xFF })
+	: scoreKeeper_(sdlClient, SDL_Color{ 0xFF, 0xFF, 0xFF, 0xFF }),
+	  soundManager_(sdlClient)
 {
 	// initialize sdl, window
 	this->sdlClient_ = sdlClient;
@@ -11,6 +12,8 @@ BlockState::BlockState(SdlClient* sdlClient, int maxPoints, bool accelerate, flo
 	this->sdlClient_->RenderSetClear(black);
 	this->sdlClient_->RenderClear();
 	this->sdlClient_->Update();
+	this->soundManager_.Register(SoundEffectEnum::WIN, ".\\audio\\win.wav");
+	this->soundManager_.Register(SoundEffectEnum::LOSE, ".\\audio\\lose.wav");
 
 	int windowW = this->sdlClient_->GetWindowWidth();
 	int windowH = this->sdlClient_->GetWindowHeight();
@@ -26,13 +29,14 @@ BlockState::BlockState(SdlClient* sdlClient, int maxPoints, bool accelerate, flo
 	Color white = { 0xFF, 0xFF, 0xFF, 0xFF };
 	SDL_Texture* sprite = this->sdlClient_->LoadTexture(".\\textures\\breakout_player.png", w, h, &white);
 	this->collection_.AddTexture(TextureIdEnum::SPRITE_1, sprite);
-	this->objects_.push_back(std::unique_ptr<IGameObject>(new PlayerObject(this->sdlClient_, TextureIdEnum::SPRITE_1, windowW/2 - w/2, windowH - w/2 - 25, w, h)));
+	this->soundManager_.Register(SoundEffectEnum::HIT, ".\\audio\\enemy_wall_hit.wav");
+	this->objects_.push_back(std::unique_ptr<IGameObject>(new PlayerObject(this->sdlClient_, TextureIdEnum::SPRITE_1, windowW/2 - w/2, windowH - w/2 - 25, w, h, &(this->soundManager_), (int)SoundEffectEnum::HIT)));
 
 	// load enemy 
 	w = 0, h = 0;
 	SDL_Texture* enemySprite = this->sdlClient_->LoadTexture(".\\textures\\breakout_player.png", w, h, &white);
 	this->collection_.AddTexture(TextureIdEnum::SPRITE_3, enemySprite);
-	EnemyObject* enemy = new EnemyObject(this->sdlClient_, TextureIdEnum::SPRITE_3, windowW / 2 - w / 2, 50, w, h, 50);
+	EnemyObject* enemy = new EnemyObject(this->sdlClient_, TextureIdEnum::SPRITE_3, windowW / 2 - w / 2, 50, w, h, 50, &(this->soundManager_), SoundEffectEnum::HIT);
 	this->objects_.push_back(std::unique_ptr<IGameObject>(enemy));
 
 	// load ball
@@ -46,10 +50,11 @@ BlockState::BlockState(SdlClient* sdlClient, int maxPoints, bool accelerate, flo
 	this->objects_.push_back(std::unique_ptr<IGameObject>(ball));
 
 	// load boundaries
-	this->objects_.push_back(std::unique_ptr<IGameObject>(new BoundaryObject(TextureIdEnum::NO_RENDER, -2, 0, 2, windowH, &this->scoreKeeper_, ball)));
-	this->objects_.push_back(std::unique_ptr<IGameObject>(new BoundaryObject(TextureIdEnum::NO_RENDER, windowW, 0, 2, windowH, &this->scoreKeeper_, ball)));
-	this->objects_.push_back(std::unique_ptr<IGameObject>(new BoundaryObject(TextureIdEnum::NO_RENDER, 0, -2, windowW, 2, &this->scoreKeeper_, ball, 1, 0)));
-	this->objects_.push_back(std::unique_ptr<IGameObject>(new BoundaryObject(TextureIdEnum::NO_RENDER, 0, windowH, windowW, 2, &this->scoreKeeper_, ball, 0, 1)));
+	this->soundManager_.Register(SoundEffectEnum::SCORE, ".\\audio\\score_change.wav");
+	this->objects_.push_back(std::unique_ptr<IGameObject>(new BoundaryObject(TextureIdEnum::NO_RENDER, -2, 0, 2, windowH, &this->scoreKeeper_, ball, 0, 0, &(this->soundManager_), SoundEffectEnum::HIT)));
+	this->objects_.push_back(std::unique_ptr<IGameObject>(new BoundaryObject(TextureIdEnum::NO_RENDER, windowW, 0, 2, windowH, &this->scoreKeeper_, ball, 0, 0, &(this->soundManager_), SoundEffectEnum::HIT)));
+	this->objects_.push_back(std::unique_ptr<IGameObject>(new BoundaryObject(TextureIdEnum::NO_RENDER, 0, -2, windowW, 2, &this->scoreKeeper_, ball, 1, 0, &(this->soundManager_), SoundEffectEnum::SCORE)));
+	this->objects_.push_back(std::unique_ptr<IGameObject>(new BoundaryObject(TextureIdEnum::NO_RENDER, 0, windowH, windowW, 2, &this->scoreKeeper_, ball, 0, 1, &(this->soundManager_), SoundEffectEnum::SCORE)));
 }
 
 void BlockState::Start()
@@ -99,6 +104,7 @@ void BlockState::Start()
 		GameStatusEnum gameStatus = this->scoreKeeper_.GetGameStatus();
 		if (gameStatus == GameStatusEnum::ENEMY_VICTORY)
 		{
+			this->soundManager_.PlaySound(SoundEffectEnum::LOSE);
 			this->sdlClient_->RenderClear();
 			int hw = 0, hh = 0;
 			int sw = 0, sh = 0;
@@ -127,6 +133,7 @@ void BlockState::Start()
 		}
 		else if (gameStatus == GameStatusEnum::PLAYER_VICTORY)
 		{
+			this->soundManager_.PlaySound(SoundEffectEnum::WIN);
 			int hw = 0, hh = 0;
 			int sw = 0, sh = 0;
 			this->sdlClient_->RenderClear();

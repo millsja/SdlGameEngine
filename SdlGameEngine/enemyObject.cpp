@@ -1,7 +1,9 @@
 #include "enemyObject.h"
 
-EnemyObject::EnemyObject(SdlClient* sdlClient, int textureId, int x, int y, int w, int h, float velocityCoefficient)
+EnemyObject::EnemyObject(SdlClient* sdlClient, int textureId, int x, int y, int w, int h, float velocityCoefficient, SoundManager* soundManager, int soundId)
 {
+	this->soundId_ = soundId;
+	this->soundManager_ = soundManager;
 	this->sdlClient_ = sdlClient;
 	this->velocityCoefficient_ = velocityCoefficient;
 	this->textureId_ = textureId;
@@ -11,8 +13,6 @@ EnemyObject::EnemyObject(SdlClient* sdlClient, int textureId, int x, int y, int 
 	this->dest_.h = h;
 	this->locationAsOfLastFrame_.x = x;
 	this->locationAsOfLastFrame_.y = y;
-	// this->xCharge_ = 0;
-	// this->yCharge_ = 0;
 	this->xVelocity_ = 0;
 	this->yVelocity_ = 0;
 	this->sdlClient_->GetElapsedTime(0, this->timeOfLastVelocityCheck_);
@@ -26,6 +26,11 @@ void EnemyObject::SetLocation(int x, int y)
 
 void EnemyObject::ResolveCollision(ICollideable* object)
 {
+	if (dynamic_cast<BallObject*>(object))
+	{
+		this->soundManager_->PlaySound(this->soundId_);
+	}
+
 	if (this->Moved(this->dest_.x, this->dest_.y))
 	{
 		if (this->locationAsOfLastFrame_.x + this->dest_.w <= object->GetDestination()->x

@@ -42,6 +42,10 @@ MainMenuState::MainMenuState(SdlClient* sdlClient)
 
 void MainMenuState::Start()
 {
+	std::string startupSoundPath = ".\\audio\\win.wav";
+	std::unique_ptr<Mix_Chunk, SdlDeleter> startupSound = std::unique_ptr<Mix_Chunk, SdlDeleter>(this->sdlClient_->LoadSoundEffect(startupSoundPath), SdlDeleter());
+	this->sdlClient_->PlaySound(startupSound.get());
+
 	SDL_Event e;
 
 	bool upped = false;
@@ -78,10 +82,10 @@ void MainMenuState::Start()
 							BlockState(this->sdlClient_, 5, false, 200).Start();
 							break;
 						case MenuItemEnum::NEW_HARD:
-							BlockState(this->sdlClient_, 15, true, 200).Start();
+							BlockState(this->sdlClient_, 15, true, 500).Start();
 							break;
 						case MenuItemEnum::NEW_ENDLESS:
-							BlockState(this->sdlClient_, -1, true, 200).Start();
+							BlockState(this->sdlClient_, -1, true, 500).Start();
 							break;
 						case MenuItemEnum::QUIT:
 							cont = false;

@@ -16,6 +16,8 @@ SdlClient::~SdlClient()
 		SDL_DestroyWindow(this->window_);
 	}
 
+	IMG_Quit();
+	Mix_Quit();
 	SDL_Quit();
 }
 
@@ -77,6 +79,12 @@ void SdlClient::InitScreenSurface()
 
 void SdlClient::InitWindow(const int screenWidth, const int screenHeight, std::string const& name, bool fullscreen)
 {
+	if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_AUDIO) < 0)
+	{
+		printf("SDL could not initialize! SDL Error: %s\n", SDL_GetError());
+		return;
+	}
+
 	this->window_ = SDL_CreateWindow(
 		name.c_str(),
 		SDL_WINDOWPOS_UNDEFINED,
@@ -95,6 +103,11 @@ void SdlClient::InitWindow(const int screenWidth, const int screenHeight, std::s
 		printf("Error initializing PNG loading: \n%s\n", IMG_GetError());
 	}
 
+	if (Mix_OpenAudio(44100, MIX_DEFAULT_FORMAT, 2, 2048) < 0)
+	{
+		printf("Error initializing audio mixer: \n%s\n", Mix_GetError());
+	}
+
 	if (TTF_Init() < 0)
 	{
 		printf("Error initializing fonts: \n%s\n", IMG_GetError());
@@ -102,6 +115,16 @@ void SdlClient::InitWindow(const int screenWidth, const int screenHeight, std::s
 
 	this->renderer_ = SDL_CreateRenderer(this->window_, -1, SDL_RENDERER_SOFTWARE);
 	SDL_SetRenderDrawColor(this->renderer_, 0xFF, 0xFF, 0xFF, 0xFF);
+}
+
+Mix_Chunk* SdlClient::LoadSoundEffect(std::string const& path)
+{
+	return Mix_LoadWAV(path.c_str());
+}
+
+void SdlClient::PlaySound(Mix_Chunk* soundEffect)
+{
+	Mix_PlayChannel(-1, soundEffect, 0);
 }
 
 SDL_Surface* SdlClient::LoadSurface(std::string const& path)

@@ -4,6 +4,7 @@
 #include <string>
 #include <stdint.h>
 #include "SDL_ttf.h"
+#include "SDL_mixer.h"
 
 struct SDL_Window;
 struct SDL_Renderer;
@@ -39,6 +40,7 @@ struct SdlDeleter
 	void operator()(SDL_Texture* p) const { SDL_DestroyTexture(p); }
 	void operator()(SDL_Surface* p) const { SDL_FreeSurface(p); }
 	void operator()(TTF_Font* p) const { TTF_CloseFont(p); }
+	void operator()(Mix_Chunk* p) const { Mix_FreeChunk(p); }
 };
 
 // typedef std::unique_ptr<SDL_Surface, SdlDeleter> UniqueSdlSurface;

@@ -4,6 +4,7 @@
 #include <string>
 #include <stdio.h>
 #include <time.h>
+#include "SDL_mixer.h"
 #include "SDL_image.h"
 #include "utilities.h"
 #include "textRenderer.h"
@@ -39,6 +40,10 @@ public:
 	// load media
 	SDL_Surface* LoadSurface(std::string const& path);
 	SDL_Texture* LoadTexture(std::string const& path, int& w, int& h, Color* alphaKey);
+
+	// audio
+	Mix_Chunk* LoadSoundEffect(std::string const& path);
+	void PlaySound(Mix_Chunk* soundEffect);
 
 	// utilities
 	double GetElapsedTime(Uint64 previousTime, Uint64& currentTime);
