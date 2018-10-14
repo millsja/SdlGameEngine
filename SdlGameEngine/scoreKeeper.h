@@ -1,12 +1,12 @@
 #ifndef SCOREKEEPER_H
 #define SCOREKEEPER_H
 
+#include <string>
+#include <memory>
 #include <stdio.h>
+#include <sstream>
 #include "SDL.h"
 #include "utilities.h"
-#include <memory>
-#include <string>
-#include <sstream>
 #include "sdlClient.h"
 
 enum GameStatusEnum { INCOMPLETE = 0, PLAYER_VICTORY = 1, ENEMY_VICTORY = 2 };

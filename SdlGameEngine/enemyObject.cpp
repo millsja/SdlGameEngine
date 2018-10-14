@@ -83,16 +83,31 @@ void EnemyObject::HandleNewFrame()
 
 void EnemyObject::Update(int x, int y)
 {
-	if (x > this->dest_.x + this->dest_.w / 2)
+	if (y <= (this->dest_.y + this->dest_.h))
 	{
-		this->xVelocity_ = 1 * this->velocityCoefficient_;
-	}
-	else if (x < this->dest_.x + this->dest_.w / 2)
-	{
-		this->xVelocity_ = -1 * this->velocityCoefficient_;
+		int w = this->sdlClient_->GetWindowWidth();
+		if (x >= w/2)
+		{
+			this->xVelocity_ = -1 * this->velocityCoefficient_;
+		}
+		else
+		{
+			this->xVelocity_ = this->velocityCoefficient_;
+		}
 	}
 	else
 	{
-		this->xVelocity_ = 0;
+		if (x > this->dest_.x + this->dest_.w / 2)
+		{
+			this->xVelocity_ = 1 * this->velocityCoefficient_;
+		}
+		else if (x < this->dest_.x + this->dest_.w / 2)
+		{
+			this->xVelocity_ = -1 * this->velocityCoefficient_;
+		}
+		else
+		{
+			this->xVelocity_ = 0;
+		}
 	}
 }
